@@ -76,7 +76,10 @@ rootcheck/
 └── README.md                    # This file (documentation only)
 ```
 
-**Note:** The `almalinux/` subdirectory and its `cis_alma_linux_10.txt` file have been removed because they contained unsupported `c:` type entries. Use the equivalent SCA YAML file at `ruleset/sca/almalinux/cis_alma_linux_10.yml` instead.
+**Note:** 
+- The `almalinux/` subdirectory and its `cis_alma_linux_10.txt` file have been removed.
+- These files contained unsupported `c:` type entries that caused parsing errors.
+- Use the equivalent SCA YAML file at `ruleset/sca/almalinux/cis_alma_linux_10.yml` instead.
 
 ## Generating RCL Files
 
