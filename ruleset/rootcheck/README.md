@@ -8,6 +8,16 @@ This directory contains policy files in the legacy Rootcheck Configuration Langu
 
 Starting with Wazuh 5.0, rootcheck no longer supports policy checking capabilities. These RCL files are provided for reference and backward compatibility purposes only.
 
+**⚠️ Command type (`c:`) is NOT supported in Wazuh 5.0+**
+
+The rootcheck parser only supports the following types:
+- `f:` - File checks
+- `r:` - Registry checks (Windows only)
+- `p:` - Process checks
+- `d:` - Directory checks
+
+If you encounter errors with `c:` (command) type entries, you must migrate to **[Security Configuration Assessment (SCA)](../sca/)** module with YAML-format policies which fully support command execution checks.
+
 For active policy and configuration assessment, use the **[Security Configuration Assessment (SCA)](../sca/)** module with YAML-format policies instead.
 
 ## About RCL Format
@@ -21,10 +31,14 @@ type:path -> pattern;
 
 ### Types
 
-- `f:` - File checks
-- `c:` - Command output checks
-- `d:` - Directory checks
-- `p:` - Process checks
+**Legacy types (pre-Wazuh 5.0):**
+- `f:` - File checks ✅ Still supported
+- `c:` - Command output checks ❌ **NOT supported in Wazuh 5.0+** (use SCA instead)
+- `d:` - Directory checks ✅ Still supported  
+- `p:` - Process checks ✅ Still supported
+- `r:` - Registry checks ✅ Still supported (Windows only)
+
+**Note:** Only `f:`, `d:`, `p:`, and `r:` types are supported in Wazuh 5.0+. Files using `c:` type will cause errors.
 
 ### Operators
 
@@ -52,19 +66,23 @@ f:/etc/fstab -> !r:^# && r:/tmp && r:nodev;
 
 ```
 rootcheck/
-├── almalinux/
-│   └── cis_alma_linux_10.txt  # CIS Benchmark checks for AlmaLinux 10
+├── almalinux/                   # (Empty - use SCA module instead)
 └── README.md                    # This file
 ```
 
+**Note:** RCL files that contained unsupported `c:` type entries have been removed. Use the equivalent SCA YAML files in `ruleset/sca/` instead.
+
 ## Generating RCL Files
 
-These RCL files are generated from their SCA YAML equivalents for reference purposes. To convert an SCA YAML file to RCL format, you can use the conversion logic that:
+**⚠️ Important:** Do not generate RCL files from SCA YAML files if they contain command execution checks. The RCL format in Wazuh 5.0+ does not support `c:` (command) type entries.
 
-1. Extracts policy metadata
-2. Converts check rules from YAML to RCL syntax
-3. Handles negation and pattern operators
-4. Preserves compliance mappings
+If you need to convert SCA YAML to RCL format for backward compatibility with older Wazuh versions (pre-5.0), ensure that:
+
+1. The conversion only includes supported types: `f:` (file), `d:` (directory), `p:` (process), `r:` (registry)
+2. Command execution checks (`c:` type) are excluded or converted to alternative check types
+3. The resulting file is clearly marked as deprecated
+
+For Wazuh 5.0+, use SCA YAML files directly instead of converting to RCL format.
 
 ## Related Documentation
 
