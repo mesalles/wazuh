@@ -10,12 +10,14 @@ Starting with Wazuh 5.0, rootcheck no longer supports policy checking capabiliti
 
 **⚠️ Command type (`c:`) is NOT supported in Wazuh 5.0+**
 
-The rootcheck parser only supports the following types:
-- `f:` - File checks
-- `c:` - Command output checks ❌ **NOT supported in Wazuh 5.0+**
-- `d:` - Directory checks
-- `p:` - Process checks
-- `r:` - Registry checks (Windows only)
+The rootcheck parser in Wazuh 5.0+ only supports the following types:
+- `f:` - File checks ✅
+- `d:` - Directory checks ✅
+- `p:` - Process checks ✅
+- `r:` - Registry checks (Windows only) ✅
+
+**Deprecated and unsupported:**
+- `c:` - Command output checks ❌ **Removed in Wazuh 5.0+**
 
 If you encounter errors with `c:` (command) type entries, you must migrate to **[Security Configuration Assessment (SCA)](../sca/)** module with YAML-format policies which fully support command execution checks.
 
@@ -32,14 +34,16 @@ type:path -> pattern;
 
 ### Types
 
-**Legacy types (pre-Wazuh 5.0):**
-- `f:` - File checks ✅ Still supported
-- `c:` - Command output checks ❌ **NOT supported in Wazuh 5.0+** (use SCA instead)
-- `d:` - Directory checks ✅ Still supported  
-- `p:` - Process checks ✅ Still supported
-- `r:` - Registry checks ✅ Still supported (Windows only)
+**Supported in Wazuh 5.0+:**
+- `f:` - File checks ✅
+- `d:` - Directory checks ✅
+- `p:` - Process checks ✅
+- `r:` - Registry checks (Windows only) ✅
 
-**Note:** Only `f:`, `d:`, `p:`, and `r:` types are supported in Wazuh 5.0+. Files using `c:` type will cause errors.
+**Deprecated (not supported in Wazuh 5.0+):**
+- `c:` - Command output checks ❌ **Use SCA YAML instead**
+
+**Note:** Files using `c:` type will cause parsing errors. Migrate to the SCA module for command execution checks.
 
 ### Operators
 
@@ -65,13 +69,14 @@ f:/etc/fstab -> !r:^# && r:/tmp && r:nodev;
 
 ## Directory Structure
 
+This directory is intentionally minimal as rootcheck policy checking was deprecated.
+
 ```
 rootcheck/
-├── almalinux/                   # (Empty - use SCA module instead)
-└── README.md                    # This file
+└── README.md                    # This file (documentation only)
 ```
 
-**Note:** RCL files that contained unsupported `c:` type entries have been removed. Use the equivalent SCA YAML files in `ruleset/sca/` instead.
+**Note:** The `almalinux/` subdirectory and its `cis_alma_linux_10.txt` file have been removed because they contained unsupported `c:` type entries. Use the equivalent SCA YAML file at `ruleset/sca/almalinux/cis_alma_linux_10.yml` instead.
 
 ## Generating RCL Files
 
