@@ -12,9 +12,10 @@ Starting with Wazuh 5.0, rootcheck no longer supports policy checking capabiliti
 
 The rootcheck parser only supports the following types:
 - `f:` - File checks
-- `r:` - Registry checks (Windows only)
-- `p:` - Process checks
+- `c:` - Command output checks ❌ **NOT supported in Wazuh 5.0+**
 - `d:` - Directory checks
+- `p:` - Process checks
+- `r:` - Registry checks (Windows only)
 
 If you encounter errors with `c:` (command) type entries, you must migrate to **[Security Configuration Assessment (SCA)](../sca/)** module with YAML-format policies which fully support command execution checks.
 
